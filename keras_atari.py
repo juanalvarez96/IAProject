@@ -19,29 +19,36 @@ from keras.models import model_from_json # Needed to load out neural network
 import pdb
 import imageio
 
+# The structure of this python code file was extracted from GitHub
+# See [2] in README
+
 # Initialize
 env = gym.make('Enduro-v0')
-number_of_inputs = env.action_space.n #This is incorrect for Pong (?)
 observation = env.reset()
 
+# Prepare the new screen for the neural network using the 
+#preprocessing scheme used to create the dataset
 def preprocess_screen(obs_t):
-    complete=np.dot(obs_t[..., :3], [0.2989, 0.5870, 0.1140]).flatten().reshape(1, -1).tolist()[0]
-    return complete
+  # Source is [1] (see README)
+  complete=np.dot(obs_t[..., :3], [0.2989, 0.5870, 0.1140]).flatten().reshape(1, -1).tolist()[0]
+  return complete
 
+# Load the trained model already created form the notebook
 json_file = open('model.json', 'r')
 loaded = json_file.read()
 json_file.close()
 model = model_from_json(loaded)
 
 while True:
-  #if render: 
+  #Prepare screen
   env.render()
-  #Preprocess, consider the frame difference as features
-  # pdb.set_trace()
+  # Prepare the observed image
   cur_x = preprocess_screen(observation)
+  # Reshape it to fit the model input
   cur_x = np.array(cur_x).reshape(1,-1)
+  # Predict next action and print it
   action = model.predict_classes(cur_x)[0]
   print(action)
   #pdb.set_trace()
-  #print(value)
+  # Send action to the game
   observation, _,_,_ = env.step(action)

@@ -5,14 +5,12 @@ import pdb
 import numpy as np
 import pandas as pd
 import pdb
-rews=[]
-infos=[]
-dones = []
-actions=[]
+# Image lenth will be constant
 IMAGE_LENGTH = int(33600)
-# We are not storing the action (for the moment)
+# Preprocess the image to transform it to a 2D image for creating the dataset
+# and add at the beginning of the image the action performed by user
 def saveToDataSetTextFile(letter, img):
-    #pdb.set_trace()
+    pdb.set_trace()
     complete=np.dot(img[..., :3], [0.2989, 0.5870, 0.1140]).flatten().reshape(1, -1).tolist()[0]
     complete.insert(0,letter)
     with open('dataset.txt', "a") as myfile:
@@ -23,14 +21,10 @@ def saveToDataSetTextFile(letter, img):
 
 def mycallbacks(obs_t, obs_tp1, action, rew, done, info):
     #pdb.set_trace()
-    rews.append(rew)
-    infos.append(info)
-    dones.append(done)
-    actions.append(action)
     saveToDataSetTextFile(action, obs_t)
 
 
-
+'''
 def load_data(path):
     #pdb.set_trace()
     df = pd.read_csv('dataset.txt', sep = '.', header = None)
@@ -40,7 +34,7 @@ def load_data(path):
     final = [images[i * n:(i + 1) * n] for i in range((len(images) + n - 1) // n )]  
     #pdb.set_trace()
     return letters, final
-
+'''
 
 
 
