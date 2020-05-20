@@ -5,6 +5,9 @@ import pdb
 import numpy as np
 import pandas as pd
 import pdb
+rews = []
+actions = []
+'''
 # Image lenth will be constant
 IMAGE_LENGTH = int(33600)
 # Preprocess the image to transform it to a 2D image for creating the dataset
@@ -39,12 +42,20 @@ def load_data(path):
     return letters, final
 '''
 
+'''
+
+def mycallbacks1(obs_t, obs_tp1, action, rew, done, info):
+    #pdb.set_trace()
+    rews.append(rew)
+    actions.append(action)
 
 
 env = gym.make('Enduro-v0')
 env.reset()
 
-play(env, zoom=3, fps=40, callback = mycallbacks)
+play(env, zoom=3, fps=40, callback = mycallbacks1)
+pdb.set_trace()
+#play(env, zoom=3, fps=40)
 #pdb.set_trace()
 #a, b = load_data('dataset.txt')
 env.close()
